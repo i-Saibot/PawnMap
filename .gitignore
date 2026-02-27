@@ -40,7 +40,9 @@
 # debug information files
 *.dwo
 
-
 .vs/
 Release/
 Debug/
+
+*.vcxproj
+*.sln
