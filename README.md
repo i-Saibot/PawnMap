@@ -4,7 +4,7 @@
 
 # *PawnMap*
 
-> Fast hash map plugin for SA-MP/open.mp. Store arrays by unique IDs with near-instant access. A lightweight alternative to massive Pawn arrays.
+> A C++ plugin for SA-MP and open.mp that provides associative array (map) functionality for Pawn. It allows you to store data in key-value pairs and organize them into containers accessible by unique IDs.
 
 ---
 
