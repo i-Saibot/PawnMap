@@ -9,7 +9,7 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
 
 <br></br>
 <details>
-<summary>Click to expand Benchmark Code</summary>
+<summary>Click to expand Benchmark</summary>
   
 <br></br>
   
