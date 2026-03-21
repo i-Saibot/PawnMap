@@ -1,7 +1,5 @@
 #include "pawn_map.h"
-#include <algorithm>
-#include <chrono>
-
+#include <cmath>
 #include "samp_sdk.hpp"
 
 //----------------------------------------------------------------------------------------------------------------------------
