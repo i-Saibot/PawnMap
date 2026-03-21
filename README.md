@@ -1,3 +1,7 @@
+[![release](https://img.shields.io/github/v/release/i-Saibot/PawnMap?include_prereleases)](https://github.com/i-Saibot/PawnMap/releases/tag/v1.0.0)
+[![downloads](https://img.shields.io/github/downloads/i-Saibot/PawnMap/total)](https://github.com/i-Saibot/PawnMap/releases/tag/v1.0.0)
+[![license](https://img.shields.io/github/license/i-Saibot/PawnMap)](LICENSE)
+
 # *PawnMap*
 
 > Fast hash map plugin for SA-MP/open.mp. Store arrays by unique IDs with near-instant access. A lightweight alternative to massive Pawn arrays.
