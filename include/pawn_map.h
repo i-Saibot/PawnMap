@@ -8,7 +8,7 @@
 
 constexpr int32_t INVALID_MAP_ID			= -1;
 constexpr int32_t INVALID_MAP_VALUE 		= -1;
-constexpr int32_t MIN_ID_FOR_KEY_STRING		= 200'000;
+constexpr int32_t MIN_ID_FOR_KEY_STRING		= 1'000'000;
 
 //----------------------------------------------------------------------------------------------------------------------------
 
