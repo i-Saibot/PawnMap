@@ -45,6 +45,5 @@ Release/
 Debug/
 
 *.vcxproj
-*.sln
 *.vcxproj.user
 *.vcxproj.filters
