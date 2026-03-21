@@ -17,6 +17,10 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
   
 <br></br>
 
+> Comparison with raw Pawn arrays is provided only to demonstrate that PawnMap is not inferior in basic tasks, and in operations requiring search or data processing, it proves even more efficient due to optimized algorithms.
+
+<br></br>
+
 > Windows
 
 | OPERATION | PawMap | Raw Array | DIFF (NT/PM) |
