@@ -1,6 +1,7 @@
-[![release](https://img.shields.io/github/v/release/i-Saibot/PawnMap?include_prereleases)](https://github.com/i-Saibot/PawnMap/releases/tag/v1.0.0)
-[![downloads](https://img.shields.io/github/downloads/i-Saibot/PawnMap/total)](https://github.com/i-Saibot/PawnMap/releases/tag/v1.0.0)
+[![release](https://img.shields.io/github/v/release/i-Saibot/PawnMap?include_prereleases)](https://github.com/i-Saibot/PawnMap/releases)
+[![downloads](https://img.shields.io/github/downloads/i-Saibot/PawnMap/total)](https://github.com/i-Saibot/PawnMap/releases)
 [![license](https://img.shields.io/github/license/i-Saibot/PawnMap)](LICENSE)
+![Stars](https://img.shields.io/github/stars/i-Saibot/PawnMap?style=social)
 
 # *PawnMap*
 
@@ -15,6 +16,10 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
 <details>
 <summary>Click to expand Benchmark</summary>
   
+<br></br>
+
+> Comparison with raw Pawn arrays is provided only to demonstrate that PawnMap is not inferior in basic tasks, and in operations requiring search or data processing, it proves even more efficient due to optimized algorithms.
+
 <br></br>
 
 > Windows
