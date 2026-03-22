@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(PawnMap)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CheckIPOSupported)
@@ -27,3 +27,7 @@ file(GLOB_RECURSE SOURCES
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES 
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Release"
+)

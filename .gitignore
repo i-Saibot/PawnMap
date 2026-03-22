@@ -43,6 +43,7 @@
 .vs/
 Release/
 Debug/
+build_linux/
 
 *.vcxproj
 *.vcxproj.user

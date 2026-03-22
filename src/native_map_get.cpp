@@ -34,24 +34,27 @@ Plugin_Native(Map_Get, AMX* amx, cell* params)
 	const int32_t containerId = p.Get<int32_t>(0);
 	const int32_t keyId = p.Get<int32_t>(1);
 	
-	if (!g_PawnMap->isValid(containerId) || keyId < 0)
-	{
-		return 0;
-	}
 	cell* destAddr = Samp_SDK::amx::Get_Addr_Safe(amx, 2);
 
 	if (!destAddr)
 	{
 		return 0;
 	}
+	const size_t numCells = static_cast<size_t>(p.Get<int32_t>(3));
+	const size_t sizeInBytes = static_cast<size_t>(numCells) * sizeof(cell);
+	
+	if (!g_PawnMap->isValid(containerId) || keyId < 0)
+	{
+		memset(destAddr, 0, sizeInBytes);
+		return 0;
+	}
 	const auto* rowData = g_PawnMap->getData(containerId, keyId);
 
 	if (!rowData)
 	{
+		memset(destAddr, 0, sizeInBytes);
 		return 0;
 	}
-	const size_t numCells = static_cast<size_t>(p.Get<int32_t>(3));
-	const size_t sizeInBytes = static_cast<size_t>(numCells) * sizeof(cell);
 	const size_t dataSizeInBytes = g_PawnMap->getDataSizeInBytes(containerId);
 	
 	if (dataSizeInBytes != sizeInBytes)
@@ -63,6 +66,7 @@ Plugin_Native(Map_Get, AMX* amx, cell* params)
 			dataSizeInBytes,
 			containerId
 		);
+		memset(destAddr, 0, sizeInBytes);
 		return 0;
 	}
 	std::memcpy(destAddr, rowData->data(), sizeInBytes);

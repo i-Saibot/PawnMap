@@ -9,7 +9,7 @@ bool PawnMap::containsKey(int32_t containerId, const int32_t keyId)
 		return false;
 	}
 	auto* container = mapContainers[containerId].get();
-	return container->dataMap.contains(static_cast<uint32_t>(keyId));
+	return container->dataMap.contains(keyId);
 }
 //----------------------------------------------------------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ bool PawnMap::isValid(const int32_t containerId) const
 std::vector<uint8_t>* PawnMap::getData(const int32_t containerId, const int32_t keyId)
 {
 	auto* container = mapContainers[containerId].get();
-	const auto it = container->dataMap.find(static_cast<uint32_t>(keyId));
+	const auto it = container->dataMap.find(keyId);
 
 	if (it != container->dataMap.end())
 	{
