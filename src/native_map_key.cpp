@@ -127,7 +127,7 @@ Plugin_Native(Map_StringKeyToInt, AMX* amx, cell* params)
 
 	Register_Parameters(containerId, key);
 	
-	if (!key.empty())
+	if (std::strlen(key.c_str()) == 0)
 	{
 		return static_cast<cell>(INVALID_MAP_VALUE);
 	}
