@@ -23,7 +23,7 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
 
 > Windows
 
-| OPERATION | PawMap | Raw Array | DIFF (NT/PM) |
+| OPERATION | PawnMap | Raw Array | DIFF (NT/PM) |
 | :--- | :--- | :--- | :--- |
 | CREATE & DELL|     2 ms    |     0 ms    |  x0.0 |
 | SET|     2 ms    |     1 ms    |  x0.5 |
@@ -42,7 +42,7 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
 
 > Linux
 
-| OPERATION | PawMap | Raw Array | DIFF (NT/PM) |
+| OPERATION | PawnMap | Raw Array | DIFF (NT/PM) |
 | :--- | :--- | :--- | :--- |
 | CREATE & DELL|     6 ms    |     0 ms    |  x0.0|
 | SET|     9 ms    |     2 ms    |  x0.2|
