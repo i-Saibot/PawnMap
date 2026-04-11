@@ -54,10 +54,9 @@ enum PawnMapType
 // Helper Iterators
 
 #define mapfor(%0,%1) \
-	for(new _mpidx = 0, %1; \
-		_mpidx < Map_Internal_LoopStep(%0, _mpidx) && ((%1 = Map_GetKeyByIndex(%0, _mpidx)) != -1); \
-		_mpidx++)
-
+	for(new %1_idx = 0, %1; \
+		%1_idx < Map_Internal_LoopStep(%0, %1_idx) && ((%1 = Map_GetKeyByIndex(%0, %1_idx)) != -1); \
+		%1_idx++)
 
 // -----------------------------------------------------------------------------
 // Core API
@@ -72,8 +71,8 @@ native PawnMap:Map_Clone(PawnMap:mapid);
 // -----------------------------------------------------------------------------
 // Data Manipulation API
 
-native bool:Map_Set(PawnMap:mapid, key, const AnyTag:data_array[], size = sizeof(data_array));
-native bool:Map_Get(PawnMap:mapid, key, const AnyTag:data_array[], size = sizeof(data_array));
+native bool:Map_Set(PawnMap:mapid, key, const AnyTag:data_array[], const size = sizeof(data_array));
+native bool:Map_Get(PawnMap:mapid, key, AnyTag:data_array[], const size = sizeof(data_array));
 
 native bool:Map_RemoveKey(PawnMap:mapid, key);
 
@@ -98,12 +97,12 @@ native Map_FindKeyByField(PawnMap:mapid, AnyTag:offset, PawnMapType:type, {Float
 // Sorting
 
 native bool:Map_SortByKey(PawnMap:mapid, PawnMapSortOrder:order);
-native bool:Map_SortByField(PawnMap:mapid, offset, PawnMapSortOrder:order, PawnMapType:typeid = MAP_TYPE_INT);
+native bool:Map_SortByField(PawnMap:mapid, AnyTag:offset, PawnMapSortOrder:order, PawnMapType:typeid = MAP_TYPE_INT);
 
 // -----------------------------------------------------------------------------
 // String Utilities
 
-native bool:Map_SetString(dest[], const source[], max_lenght_source = sizeof(source));
+native bool:Map_SetString(dest[], const source[], const max_lenght_source = sizeof(source));
 
 // -----------------------------------------------------------------------------
 // Key String To Int
@@ -121,7 +120,7 @@ native bool:Map_Internal_SafeRemoveKey(PawnMap:mapid, index);
 
 // -----------------------------------------------------------------------------
 // Version
-native Map_GetVersion(value[], len = sizeof(value));
+native Map_GetVersion(value[], const len = sizeof(value));
 
 // -----------------------------------------------------------------------------
 // Initialization Hook
