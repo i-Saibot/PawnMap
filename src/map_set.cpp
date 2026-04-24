@@ -8,7 +8,7 @@ bool PawnMap::setData(const int32_t containerId, const int32_t keyId, const uint
 	const uint32_t uKey = static_cast<uint32_t>(keyId);
 	
 	auto& vec = container->dataMap[uKey];
-	const bool isNew = vec.empty(); 
+	const bool isNew = vec.empty();
 	
 	vec.assign(sourceData, sourceData + sizeInBytes);
 

@@ -71,7 +71,7 @@ native PawnMap:Map_Clone(PawnMap:mapid);
 // -----------------------------------------------------------------------------
 // Data Manipulation API
 
-native bool:Map_Set(PawnMap:mapid, key, const AnyTag:data_array[], const size = sizeof(data_array));
+native bool:Map_Set(PawnMap:mapid, key, const AnyTag:data_array[] = "", const size = sizeof(data_array));
 native bool:Map_Get(PawnMap:mapid, key, AnyTag:data_array[], const size = sizeof(data_array));
 
 native bool:Map_RemoveKey(PawnMap:mapid, key);

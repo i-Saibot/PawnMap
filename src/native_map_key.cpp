@@ -1,6 +1,6 @@
 #define SAMP_SDK_WANT_AMX_EVENTS
 
-#include "../samp-sdk/samp_sdk.hpp"
+#include "samp-sdk/samp_sdk.hpp"
 #include "natives.h"
 
 //----------------------------------------------------------------------------------------------------------------------------
