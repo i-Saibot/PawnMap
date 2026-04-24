@@ -1,5 +1,5 @@
 /*
-* Pawn Unordered Map Plugin v1.0.0
+* Pawn Unordered Map Plugin
 * Author: Saibot
 * Created: 2026
 * * The MIT License (MIT)
@@ -14,7 +14,7 @@
 // -----------------------------------------------------------------------------
 // Versioning
 
-#define MAP_PLUGIN_VERSION          "1.0.1"
+#define MAP_PLUGIN_VERSION          "1.0.2"
 
 // -----------------------------------------------------------------------------
 // Macros for Any tags
