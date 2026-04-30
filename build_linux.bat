@@ -1,12 +1,35 @@
 @echo off
+set /p VERSION="Enter PawnMap version: "
 set IMAGE_NAME=pawnmap-builder
 
-echo [1/2] Building Docker image...
+echo [1/3] Building Docker image...
 docker build -t %IMAGE_NAME% .
 
-echo [2/2] Running build process...
+echo [2/3] Running build process...
+if exist build_linux rd /s /q build_linux
 docker run --rm -v "%cd%:/app" %IMAGE_NAME%
 
+echo [3/3] Creating archives for PawnMap v%VERSION%...
+
+set WIN_DLL=Release\PawnMap.dll
+set INCLUDE_FILE=pawn\PawnMap.inc
+
+if exist temp_win rd /s /q temp_win
+mkdir temp_win
+if exist "%WIN_DLL%" copy "%WIN_DLL%" "temp_win\"
+if exist "%INCLUDE_FILE%" copy "%INCLUDE_FILE%" "temp_win\"
+powershell Compress-Archive -Path "temp_win\*" -DestinationPath "PawnMap-%VERSION%-win32.zip" -Force
+
+docker run --rm -v "%cd%:/app" %IMAGE_NAME% sh -c "mkdir -p temp_linux && cp /app/Release/*.so temp_linux/ 2>/dev/null || cp /app/*.so temp_linux/ 2>/dev/null && cp /app/pawn/*.inc temp_linux/ 2>/dev/null && tar -czf SmartEvents-linux.tar.gz -C temp_linux . && mv SmartEvents-linux.tar.gz PawnMap-%VERSION%-linux.tar.gz"
+
+rd /s /q temp_win
+docker run --rm -v "%cd%:/app" %IMAGE_NAME% rm -rf temp_linux
+
 echo.
-echo Operation finished!
+echo === Done! ===
+if exist "PawnMap-%VERSION%-linux.tar.gz" (
+    echo Created: PawnMap-%VERSION%-linux.tar.gz
+) else (
+    echo [ERROR] Linux .so file not found in Release/ or root folder!
+)
 pause

@@ -15,7 +15,7 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -static-libgcc 
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/ankerl
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/samp-sdk
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/samp-sdk/amx
 )
