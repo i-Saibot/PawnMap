@@ -1,7 +1,8 @@
 [![release](https://img.shields.io/github/v/release/i-Saibot/PawnMap?include_prereleases)](https://github.com/i-Saibot/PawnMap/releases)
 [![downloads](https://img.shields.io/github/downloads/i-Saibot/PawnMap/total)](https://github.com/i-Saibot/PawnMap/releases)
 [![license](https://img.shields.io/github/license/i-Saibot/PawnMap)](LICENSE)
-![Stars](https://img.shields.io/github/stars/i-Saibot/PawnMap?style=social)
+[![SA-MP](https://img.shields.io/badge/SA--MP-0.3.7-blue)](https://www.sa-mp.com)
+[![open.mp](https://img.shields.io/badge/open.mp-supported-7986CB?style=flat&logo=github)](https://open.mp)
 
 # *PawnMap*
 
