@@ -23,8 +23,6 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
 
 <br></br>
 
-> Windows
-
 | OPERATION | PawnMap | Raw Array | DIFF (NT/PM) |
 | :--- | :--- | :--- | :--- |
 | CREATE & DELL|     2 ms    |     0 ms    |  x0.0 |
@@ -39,25 +37,6 @@ Detailed information about functions and usage can be found in the **[PawnMap Wi
 | SET STR|     1 ms    |     1 ms    |  x1.0 |
 | CONS STR|     0 ms    |  1394 ms    |  x1394.0 |
 |  `TOTAL TIME` |     `63 ms`    |  `4790 ms`   |  `x76.0` |
-
-<br></br>
-
-> Linux
-
-| OPERATION | PawnMap | Raw Array | DIFF (NT/PM) |
-| :--- | :--- | :--- | :--- |
-| CREATE & DELL|     6 ms    |     0 ms    |  x0.0|
-| SET|     9 ms    |     2 ms    |  x0.2|
-| GET|    10 ms    |     4 ms    |  x0.4|
-| ADD|     5 ms    |     0 ms    |  x0.0|
-| FIND|    21 ms    |   629 ms    |  x29.9|
-| CONTAINS|     2 ms    |  1846 ms    |  x923.0|
-| REMOVE|   108 ms    |  4857 ms    |  x44.9|
-| SWAP|     1 ms    |    11 ms    |  x11.0|
-| SORT|     5 ms    |    54 ms    |  x10.8|
-| SET STR|     3 ms    |     3 ms    |  x1.0|
-| CONS STR|     1 ms    |  2909 ms    |  x2909.0|
-| `TOTAL TIME`     |   `171 ms`    |  `10315 ms`   |  `x60.3`|
 
 <br></br>
 
