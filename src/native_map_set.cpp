@@ -1,78 +1,81 @@
-#define SAMP_SDK_WANT_AMX_EVENTS
-
-#include "samp-sdk/samp_sdk.hpp"
 #include "natives.h"
+#include "common.h"
 #include "pawn_map_log.h"
 
+namespace native
+{
 //----------------------------------------------------------------------------------------------------------------------------
 
-Plugin_Native(Map_Set, AMX* amx, cell* params)
-{
-	Samp_SDK::Native_Params p(amx, params);
+	cell AMX_NATIVE_CALL Map_Set(AMX* amx, cell* params)
+	{
+		const int32_t containerId = static_cast<int32_t>(params[1]);
+		const int32_t keyId = static_cast<int32_t>(params[2]);
 
-	const int32_t containerId = p.Get<int32_t>(0);
-	const int32_t keyId = p.Get<int32_t>(1);
-	
-	if (!g_PawnMap->isValid(containerId) || keyId < 0)
-	{
-		return 0;
+		if (!g_PawnMap->isValid(containerId) || keyId < 0)
+		{
+			return 0;
+		}
+
+		cell* srcAddr = nullptr;
+		if (amx_GetAddr(amx, params[3], &srcAddr) != AMX_ERR_NONE || srcAddr == nullptr)
+		{
+			return 0;
+		}
+
+		const size_t numCells = static_cast<size_t>(params[4]);
+		const size_t sizeInBytes = numCells * sizeof(cell);
+		const size_t dataSizeInBytes = g_PawnMap->getDataSizeInBytes(containerId);
+
+		if (dataSizeInBytes == 0)
+		{
+			g_PawnMap->setDataSizeInBytes(containerId, sizeInBytes);
+		}
+		else if (dataSizeInBytes != sizeInBytes)
+		{
+			pawn_map_log::logPawnMap(
+				"[Warning] Map_Set: %s (provided %zu, expected %zu). Container: %d",
+				(sizeInBytes < dataSizeInBytes ? "less data" : "larger array"),
+				sizeInBytes,
+				dataSizeInBytes,
+				containerId
+			);
+			return 0;
+		}
+		return static_cast<cell>(g_PawnMap->setData(
+			containerId,
+			keyId,
+			reinterpret_cast<const uint8_t*>(srcAddr),
+			sizeInBytes
+		));
 	}
-	const cell* srcAddr = Samp_SDK::amx::Get_Addr_Safe(amx, 2);
-	
-	if (!srcAddr)
-	{
-		return 0;
-	}
-	const size_t numCells = static_cast<size_t>(p.Get<int32_t>(3));
-	const size_t sizeInBytes = static_cast<size_t>(numCells) * sizeof(cell);
-	const size_t dataSizeInBytes = g_PawnMap->getDataSizeInBytes(containerId);
-	
-	if (dataSizeInBytes == 0)
-	{
-		g_PawnMap->setDataSizeInBytes(containerId, sizeInBytes);
-	}
-	else if (dataSizeInBytes != sizeInBytes)
-	{
-		pawn_map_log::logPawnMap(
-			"[Warning] Map_Set: %s (provided %zu, expected %zu). Container: %d",
-			(sizeInBytes < dataSizeInBytes ? "less data" : "larger array"),
-			sizeInBytes,
-			dataSizeInBytes,
-			containerId
-		);
-		return 0;
-	}
-	return static_cast<cell>(g_PawnMap->setData(
-		containerId,
-		keyId,
-		reinterpret_cast<const uint8_t*>(srcAddr),
-		sizeInBytes
-	));
-}
 
 //------------------------------------------------------------------------------------------------------------
 
-Plugin_Native(Map_SetString, AMX* amx, cell* params)
-{
-	Samp_SDK::Native_Params p(amx, params);
+	cell AMX_NATIVE_CALL Map_SetString(AMX* amx, cell* params)
+	{
+		cell* dest = nullptr;
+		cell* src = nullptr;
 
-	cell* dest = Samp_SDK::amx::Get_Addr_Safe(amx, 0);
-	cell* src  = Samp_SDK::amx::Get_Addr_Safe(amx, 1);
-	
-	if (!dest || !src)
-	{
-		return 0;
-	}
-	int len = 0;
-	
-	while (src[len] != 0)
-	{
+		if (amx_GetAddr(amx, params[1], &dest) != AMX_ERR_NONE || dest == nullptr)
+		{
+			return 0;
+		}
+		if (amx_GetAddr(amx, params[2], &src) != AMX_ERR_NONE || src == nullptr)
+		{
+			return 0;
+		}
+
+		int len = 0;
+
+		while (src[len] != 0)
+		{
+			len++;
+		}
 		len++;
+
+		memcpy(dest, src, len * sizeof(cell));
+		return 1;
 	}
-	len++;
-	
-	memcpy(dest, src, len * sizeof(cell));
-	return 1;
-}
 
 //------------------------------------------------------------------------------------------------------------
+}

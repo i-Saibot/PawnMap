@@ -22,50 +22,98 @@
 * SOFTWARE.
 */
 
-#define SAMP_SDK_IMPLEMENTATION
-#define SAMP_SDK_WANT_AMX_EVENTS
 
+#define HAVE_STDINT_H
+#include <malloc.h>
+#include "samp-sdk/amx/amx.h"
+#include "samp-sdk/plugincommon.h"
 
 #include "natives.h"
-#include "samp-sdk/samp_sdk.hpp"
+#include "common.h"
 
 //------------------------------------------------------------------------------------------------------------
 
+logprintf_t logprintf = nullptr;
 std::unique_ptr<PawnMap> g_PawnMap;
 
 //------------------------------------------------------------------------------------------------------------
 
-bool OnLoad()
+AMX_NATIVE_INFO Natives[] =
+{
+	{ "Map_Create",					native::Map_Create },
+	{ "Map_Destroy",				native::Map_Destroy },
+	{ "Map_Clear",					native::Map_Clear },
+	{ "Map_Clone",					native::Map_Clone },
+	{ "Map_Merge",					native::Map_Merge },
+	{ "Map_GetVersion",				native::Map_GetVersion },
+	{ "Map_ContainsKey",			native::Map_ContainsKey },
+	{ "Map_IsValid",				native::Map_IsValid },
+	{ "Map_Get",					native::Map_Get },
+	{ "Map_GetKeyCount",			native::Map_GetKeyCount },
+	{ "Map_GetFreeKey",				native::Map_GetFreeKey },
+	{ "Map_GetKeyByIndex",			native::Map_GetKeyByIndex },
+	{ "Map_ContainsStringKey",		native::Map_ContainsStringKey },
+	{ "Map_GetIdByStringKey",		native::Map_GetIdByStringKey },
+	{ "Map_RemoveKey",				native::Map_RemoveKey },
+	{ "Map_Internal_SafeRemoveKey",	native::Map_Internal_SafeRemoveKey },
+	{ "Map_Internal_LoopStep",		native::Map_Internal_LoopStep },
+	{ "Map_RenameKey",				native::Map_RenameKey },
+	{ "Map_Swap",					native::Map_Swap },
+	{ "Map_SortByKey",				native::Map_SortByKey },
+	{ "Map_SortByField",			native::Map_SortByField },
+	{ "Map_FindKeyByField",			native::Map_FindKeyByField },
+	{ "Map_StringKeyToInt",			native::Map_StringKeyToInt },
+	{ "Map_GetStringById",			native::Map_GetStringById },
+	{ "Map_Set",					native::Map_Set },
+	{ "Map_SetString",				native::Map_SetString },
+	{ 0, 0 }
+};
+
+//------------------------------------------------------------------------------------------------------------
+
+
+PLUGIN_EXPORT bool PLUGIN_CALL Load(void** ppData)
 {
 	g_PawnMap = std::make_unique<PawnMap>();
-	Samp_SDK::Log(" ");
-	Samp_SDK::Log(" [Map Plugin] ------------------------------------- ");
-	Samp_SDK::Log(" [Map Plugin]  Version: %s", PLUGIN_VERSION);
-	Samp_SDK::Log(" [Map Plugin]  Author:  Saibot");
-	Samp_SDK::Log(" [Map Plugin]  Status:  Loaded successfully");
-	Samp_SDK::Log(" [Map Plugin] ------------------------------------- ");
-	Samp_SDK::Log(" ");
+	pAMXFunctions = ppData[PLUGIN_DATA_AMX_EXPORTS];
+	logprintf = (logprintf_t)ppData[PLUGIN_DATA_LOGPRINTF];
+
+	logprintf(" ");
+	logprintf(" [PawnMap Plugin] ------------------------------------- ");
+	logprintf(" [PawnMap Plugin]  Version: %s", PLUGIN_VERSION);
+	logprintf(" [PawnMap Plugin]  Author:  Saibot");
+	logprintf(" [PawnMap Plugin]  Status:  Loaded successfully");
+	logprintf(" [PawnMap Plugin] ------------------------------------- ");
+	logprintf(" ");
 	return true;
 }
 
 //------------------------------------------------------------------------------------------------------------
 
-void OnUnload()
+PLUGIN_EXPORT void PLUGIN_CALL Unload()
 {
-	g_PawnMap.reset();
-	Samp_SDK::Log("- PawnMap Plugin Unloaded");
+	logprintf("PawnMap Plugin Unloaded");
 }
 
 //------------------------------------------------------------------------------------------------------------
 
-unsigned int GetSupportFlags()
+PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports()
 {
-	return SUPPORTS_VERSION;
+	return SUPPORTS_VERSION | SUPPORTS_AMX_NATIVES | SUPPORTS_PROCESS_TICK;
 }
 
 //------------------------------------------------------------------------------------------------------------
 
-void OnAmxLoad(AMX* amx) { }
-void OnAmxUnload(AMX* amx) { }
+PLUGIN_EXPORT int PLUGIN_CALL AmxLoad(AMX* amx)
+{
+	return amx_Register(amx, Natives, -1);
+}
+
+//------------------------------------------------------------------------------------------------------------
+
+PLUGIN_EXPORT int PLUGIN_CALL AmxUnload(AMX* amx)
+{
+	return AMX_ERR_NONE;
+}
 
 //------------------------------------------------------------------------------------------------------------

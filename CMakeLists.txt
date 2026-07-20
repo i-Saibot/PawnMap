@@ -15,19 +15,25 @@ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -static-libgcc 
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/samp-sdk
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/samp-sdk/amx
 )
 
-file(GLOB_RECURSE SOURCES 
-    "src/*.cpp" 
-    "lib/samp-sdk/*.cpp"
-)
+file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+file(GLOB_RECURSE SDK_FILES "lib/samp-sdk/*.cpp")
+
+set(SOURCES ${SRC_FILES} ${SDK_FILES})
+
+message(STATUS "--- Found sources: ${SOURCES}")
+
+if(NOT SOURCES)
+    message(FATAL_ERROR "SOURCES list is empty! Check src/ and lib/samp-sdk/ folders...")
+endif()
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
-set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 set_target_properties(${PROJECT_NAME} PROPERTIES 
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Release"
 )

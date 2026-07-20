@@ -1,6 +1,5 @@
 #include "pawn_map.h"
 #include <cmath>
-#include "samp-sdk/samp_sdk.hpp"
 
 //----------------------------------------------------------------------------------------------------------------------------
 
@@ -235,7 +234,7 @@ bool PawnMap::sortByField(const int32_t containerId, const int32_t offset, const
 		return true;
 	}
 	const bool descending = (order == PawnMapSortOrder::SORT_DESCENDING);
-	const size_t byteOffset = static_cast<size_t>(offset) * sizeof(cell);
+	const size_t byteOffset = static_cast<size_t>(offset) * sizeof(int32_t);
 	
 	std::sort(container->keyCache.begin(), container->keyCache.end(), [&](uint32_t a, uint32_t b)
 	{

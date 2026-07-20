@@ -18,18 +18,16 @@ if exist temp_win rd /s /q temp_win
 mkdir temp_win
 if exist "%WIN_DLL%" copy "%WIN_DLL%" "temp_win\"
 if exist "%INCLUDE_FILE%" copy "%INCLUDE_FILE%" "temp_win\"
+
 powershell Compress-Archive -Path "temp_win\*" -DestinationPath "PawnMap-%VERSION%-win32.zip" -Force
 
-docker run --rm -v "%cd%:/app" %IMAGE_NAME% sh -c "mkdir -p temp_linux && cp /app/Release/*.so temp_linux/ 2>/dev/null || cp /app/*.so temp_linux/ 2>/dev/null && cp /app/pawn/*.inc temp_linux/ 2>/dev/null && tar -czf SmartEvents-linux.tar.gz -C temp_linux . && mv SmartEvents-linux.tar.gz PawnMap-%VERSION%-linux.tar.gz"
+docker run --rm -v "%cd%:/app" %IMAGE_NAME% sh -c "mkdir -p temp_linux && cp /app/Release/PawnMap.so temp_linux/ && cp /app/pawn/PawnMap.inc temp_linux/ && tar -czf PawnMap-%VERSION%-linux.tar.gz -C temp_linux PawnMap.so PawnMap.inc"
 
 rd /s /q temp_win
 docker run --rm -v "%cd%:/app" %IMAGE_NAME% rm -rf temp_linux
 
 echo.
 echo === Done! ===
-if exist "PawnMap-%VERSION%-linux.tar.gz" (
-    echo Created: PawnMap-%VERSION%-linux.tar.gz
-) else (
-    echo [ERROR] Linux .so file not found in Release/ or root folder!
-)
+echo Created: PawnMap-%VERSION%-win32.zip (contains: .dll, .inc)
+echo Created: PawnMap-%VERSION%-linux.tar.gz (contains: .so, .inc)
 pause

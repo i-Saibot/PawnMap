@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <memory>
+#include <algorithm>
+
 #include "ankerl/unordered_dense.h"
 
 //----------------------------------------------------------------------------------------------------------------------------

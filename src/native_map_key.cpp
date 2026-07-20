@@ -1,163 +1,155 @@
-#define SAMP_SDK_WANT_AMX_EVENTS
-
-#include "samp-sdk/samp_sdk.hpp"
 #include "natives.h"
+#include "common.h"
 
+#include <cstring>
+
+namespace native
+{
 //----------------------------------------------------------------------------------------------------------------------------
 
-Plugin_Native(Map_RemoveKey, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	int32_t keyId;
-
-	Register_Parameters(containerId, keyId);
-	return static_cast<cell>(g_PawnMap->removeKey(containerId, keyId));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_Internal_SafeRemoveKey, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	int32_t index;
-
-	Register_Parameters(containerId, index);
-	return static_cast<cell>(g_PawnMap->safeRemoveKey(containerId, index));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_Internal_LoopStep, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	
-	Register_Parameters(containerId);
-	
-	cell* loopIdxPtr = Samp_SDK::amx::Get_Addr_Safe(amx, 1);
-
-	if (!loopIdxPtr)
+	cell AMX_NATIVE_CALL Map_RemoveKey(AMX* amx, cell* params)
 	{
-		return 0;
+		int32_t containerId = static_cast<int32_t>(params[1]);
+		int32_t keyId = static_cast<int32_t>(params[2]);
+
+		return static_cast<cell>(g_PawnMap->removeKey(containerId, keyId));
 	}
-	return static_cast<cell>(g_PawnMap->loopStep(containerId, loopIdxPtr));
-}
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-Plugin_Native(Map_RenameKey, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	int32_t oldKeyId;
-	int32_t newKeyId;
-
-	Register_Parameters(containerId, oldKeyId, newKeyId);
-	return static_cast<cell>(g_PawnMap->renameKey(containerId, oldKeyId, newKeyId));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_Swap, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	int32_t keyId1;
-	int32_t keyId2;
-
-	Register_Parameters(containerId, keyId1, keyId2);
-	return static_cast<cell>(g_PawnMap->swap(containerId, keyId1, keyId2));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_SortByKey, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	PawnMapSortOrder order;
-
-	Register_Parameters(containerId, order);
-
-	order = static_cast<PawnMapSortOrder>(static_cast<uint8_t>(order) + 1);
-	return static_cast<cell>(g_PawnMap->sortByKey(containerId, order));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_SortByField, AMX* amx, cell* params)
-{
-	Samp_SDK::Native_Params p(amx, params);
-	
-	int32_t containerId = p.Get<int32_t>(0);
-	int32_t offset = p.Get<int32_t>(1);
-	PawnMapSortOrder order = static_cast<PawnMapSortOrder>(p.Get<int32_t>(2));
-	PawnMapType fieldType = static_cast<PawnMapType>(p.Get<int32_t>(3));
-	
-	return static_cast<cell>(g_PawnMap->sortByField(containerId, offset, fieldType, order));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_FindKeyByField, AMX* amx, cell* params)
-{
-	Samp_SDK::Native_Params p(amx, params);
-    
-	const int32_t containerId = p.Get<int32_t>(0);
-	const int32_t byteOffset  = p.Get<int32_t>(1) * sizeof(cell);
-	const PawnMapType fieldType = static_cast<PawnMapType>(p.Get<int32_t>(2));
-
-	if (!g_PawnMap->isValid(containerId))
-		return static_cast<cell>(INVALID_MAP_ID);
-
-	const cell* srcAddr = Samp_SDK::amx::Get_Addr_Safe(amx, 3);
-	if (!srcAddr)
-		return static_cast<cell>(INVALID_MAP_ID);
-
-	return static_cast<cell>(g_PawnMap->findKeyByField(
-		containerId,
-		byteOffset,
-		reinterpret_cast<const void*>(srcAddr),
-		fieldType
-	));
-}
-
-//----------------------------------------------------------------------------------------------------------------------------
-
-Plugin_Native(Map_StringKeyToInt, AMX* amx, cell* params)
-{
-	int32_t containerId;
-	std::string key;
-
-	Register_Parameters(containerId, key);
-	
-	if (std::strlen(key.c_str()) == 0)
+	cell AMX_NATIVE_CALL Map_Internal_SafeRemoveKey(AMX* amx, cell* params)
 	{
-		return static_cast<cell>(INVALID_MAP_VALUE);
+		int32_t containerId = static_cast<int32_t>(params[1]);
+		int32_t index = static_cast<int32_t>(params[2]);
+
+		return static_cast<cell>(g_PawnMap->safeRemoveKey(containerId, index));
 	}
-	return static_cast<cell>(g_PawnMap->stringKeyToInt(containerId, key));
-}
 
 //----------------------------------------------------------------------------------------------------------------------------
 
-Plugin_Native(Map_GetStringById, AMX* amx, cell* params)
-{
-	Samp_SDK::Native_Params p(amx, params);
-	const int32_t containerId = p.Get<int32_t>(0);
-	const int32_t keyId = p.Get<int32_t>(1);
-	
-	if (keyId < MIN_ID_FOR_KEY_STRING)
+	cell AMX_NATIVE_CALL Map_Internal_LoopStep(AMX* amx, cell* params)
 	{
-		return 0;
-	}
-	std::string_view key = g_PawnMap->findStringKeyByInt(containerId, keyId);
-	
-	if (!key.empty())
-	{
-		if (cell* addr = Samp_SDK::amx::Get_Addr_Safe(amx, 2))
+		int32_t containerId = static_cast<int32_t>(params[1]);
+
+		cell* loopIdxPtr = nullptr;
+		if (amx_GetAddr(amx, params[2], &loopIdxPtr) != AMX_ERR_NONE || loopIdxPtr == nullptr)
 		{
-			const int32_t maxLen = p.Get<int32_t>(3);
-			Samp_SDK::amx::Set_String(addr, std::string(key).c_str(), maxLen);
-			return 1;
+			return 0;
 		}
+
+		return static_cast<cell>(g_PawnMap->loopStep(containerId, loopIdxPtr));
 	}
-	return 0;
-}
 
 //----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_RenameKey(AMX* amx, cell* params)
+	{
+		int32_t containerId = static_cast<int32_t>(params[1]);
+		int32_t oldKeyId = static_cast<int32_t>(params[2]);
+		int32_t newKeyId = static_cast<int32_t>(params[3]);
+
+		return static_cast<cell>(g_PawnMap->renameKey(containerId, oldKeyId, newKeyId));
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_Swap(AMX* amx, cell* params)
+	{
+		int32_t containerId = static_cast<int32_t>(params[1]);
+		int32_t keyId1 = static_cast<int32_t>(params[2]);
+		int32_t keyId2 = static_cast<int32_t>(params[3]);
+
+		return static_cast<cell>(g_PawnMap->swap(containerId, keyId1, keyId2));
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_SortByKey(AMX* amx, cell* params)
+	{
+		int32_t containerId = static_cast<int32_t>(params[1]);
+		PawnMapSortOrder order = static_cast<PawnMapSortOrder>(static_cast<uint8_t>(params[2]));
+
+		order = static_cast<PawnMapSortOrder>(static_cast<uint8_t>(order) + 1);
+		return static_cast<cell>(g_PawnMap->sortByKey(containerId, order));
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_SortByField(AMX* amx, cell* params)
+	{
+		int32_t containerId = static_cast<int32_t>(params[1]);
+		int32_t offset = static_cast<int32_t>(params[2]);
+		PawnMapSortOrder order = static_cast<PawnMapSortOrder>(static_cast<int32_t>(params[3]));
+		PawnMapType fieldType = static_cast<PawnMapType>(static_cast<int32_t>(params[4]));
+
+		return static_cast<cell>(g_PawnMap->sortByField(containerId, offset, fieldType, order));
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_FindKeyByField(AMX* amx, cell* params)
+	{
+		const int32_t containerId = static_cast<int32_t>(params[1]);
+		const int32_t byteOffset = static_cast<int32_t>(params[2]) * sizeof(cell);
+		const PawnMapType fieldType = static_cast<PawnMapType>(static_cast<int32_t>(params[3]));
+
+		if (!g_PawnMap->isValid(containerId))
+			return static_cast<cell>(INVALID_MAP_ID);
+
+		cell* srcAddr = nullptr;
+		if (amx_GetAddr(amx, params[4], &srcAddr) != AMX_ERR_NONE || srcAddr == nullptr)
+			return static_cast<cell>(INVALID_MAP_ID);
+
+		return static_cast<cell>(g_PawnMap->findKeyByField(
+			containerId,
+			byteOffset,
+			reinterpret_cast<const void*>(srcAddr),
+			fieldType
+		));
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_StringKeyToInt(AMX* amx, cell* params)
+	{
+		int32_t containerId = static_cast<int32_t>(params[1]);
+
+		char* key = nullptr;
+		amx_StrParam(amx, params[2], key);
+
+		if (key == nullptr || std::strlen(key) == 0)
+		{
+			return static_cast<cell>(INVALID_MAP_VALUE);
+		}
+
+		return static_cast<cell>(g_PawnMap->stringKeyToInt(containerId, std::string(key)));
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+
+	cell AMX_NATIVE_CALL Map_GetStringById(AMX* amx, cell* params)
+	{
+		const int32_t containerId = static_cast<int32_t>(params[1]);
+		const int32_t keyId = static_cast<int32_t>(params[2]);
+
+		if (keyId < MIN_ID_FOR_KEY_STRING)
+		{
+			return 0;
+		}
+		std::string_view key = g_PawnMap->findStringKeyByInt(containerId, keyId);
+
+		if (!key.empty())
+		{
+			cell* addr = nullptr;
+			if (amx_GetAddr(amx, params[3], &addr) == AMX_ERR_NONE && addr != nullptr)
+			{
+				const int32_t maxLen = static_cast<int32_t>(params[4]);
+				amx_SetString(addr, std::string(key).c_str(), 0, 0, maxLen);
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+//----------------------------------------------------------------------------------------------------------------------------
+}
